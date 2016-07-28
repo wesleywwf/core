@@ -357,7 +357,7 @@ class CalDavBackend extends AbstractBackend implements SyncSupport, Subscription
 			'uri'          => $calendarUri,
 			'synctoken'    => 1,
 			'transparent'  => 0,
-			'components'   => 'VEVENT,VTODO',
+			'components'   => 'VEVENT',
 			'displayname'  => $calendarUri
 		];
 

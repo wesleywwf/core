@@ -5,7 +5,7 @@
  * @author Robin Appelman <icewind@owncloud.com>
  * @author Robin McCorkell <robin@mccorkell.me.uk>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud GmbH.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -96,6 +96,17 @@ interface IAppConfig {
 	 * @since 7.0.0
 	 */
 	public function setValue($app, $key, $value);
+
+	/**
+	 * increases an existing app wide value
+	 *
+	 * @param string $appName the appName that we want to store the value under
+	 * @param string|float|int $key the key of the value, under which will be saved
+	 * @param int $amount the value that should be stored
+	 * @return int
+	 * @since 9.2.0
+	 */
+	public function increaseAppValue($appName, $key, $amount);
 
 	/**
 	 * Get all apps using the config

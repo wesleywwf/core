@@ -132,6 +132,10 @@ class SharedMount extends MountPoint implements MoveableMount {
 		$name = $pathinfo['filename'];
 		$dir = $pathinfo['dirname'];
 
+		$targets = array_map(function($mountPoint) {
+			return $mountPoint->getShare()->getTarget();
+		}, $mountpoints);
+
 		// Helper function to find existing mount points
 		$mountpointExists = function($path) use ($mountpoints) {
 			foreach ($mountpoints as $mountpoint) {
@@ -144,6 +148,14 @@ class SharedMount extends MountPoint implements MoveableMount {
 
 		$i = 2;
 		while ($view->file_exists($path) || $mountpointExists($path)) {
+			$debugInfo = [
+				'user' => $this->user,
+				'path' => $path,
+				'file_exists' => $view->file_exists($path),
+				'mountpointExists' => $mountpointExists($path),
+				'targets' => $targets,
+			];
+			\OC::$server->getLogger()->debug('SharedMount:: ' . json_encode($debugInfo), array('app' => 'DEBUG'));
 			$path = Filesystem::normalizePath($dir . '/' . $name . ' ('.$i.')' . $ext);
 			$i++;
 		}

@@ -32,6 +32,7 @@ namespace OCA\Files_Sharing;
 
 use OC\Files\Filesystem;
 use OC\Files\Cache\FailedCache;
+use OC\Files\Cache\FailedScanner;
 use OCP\Constants;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Storage\IStorage;
@@ -326,6 +327,9 @@ class SharedStorage extends \OC\Files\Storage\Wrapper\Jail implements ISharedSto
 	}
 
 	public function getScanner($path = '', $storage = null) {
+		if (is_null($this->sourceStorage) || $this->sourceStorage instanceof FailedStorage) {
+			return new FailedScanner();
+		}
 		if (!$storage) {
 			$storage = $this;
 		}

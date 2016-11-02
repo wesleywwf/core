@@ -23,9 +23,10 @@
 
 namespace OC\Files\Storage;
 
-use OC\Files\Cache\FailedCache;
 use \OCP\Lock\ILockingProvider;
 use \OCP\Files\StorageNotAvailableException;
+use OC\Files\Cache\FailedCache;
+use OC\Files\Cache\FailedScanner;
 
 /**
  * Storage placeholder to represent a missing precondition, storage unavailable
@@ -210,7 +211,23 @@ class FailedStorage extends Common {
 		throw new StorageNotAvailableException($this->e->getMessage(), $this->e->getCode(), $this->e);
 	}
 
+	public function getWatcher($path = '', $storage = null) {
+		throw new StorageNotAvailableException($this->e->getMessage(), $this->e->getCode(), $this->e);
+	}
+
+	public function getPropagator($storage = null) {
+		throw new StorageNotAvailableException($this->e->getMessage(), $this->e->getCode(), $this->e);
+	}
+
+	public function getUpdater($storage = null) {
+		throw new StorageNotAvailableException($this->e->getMessage(), $this->e->getCode(), $this->e);
+	}
+
 	public function getCache($path = '', $storage = null) {
 		return new FailedCache();
+	}
+
+	public function getScanner($path = '', $storage = null) {
+		return new FailedScanner();
 	}
 }

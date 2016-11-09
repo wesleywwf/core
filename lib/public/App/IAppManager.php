@@ -112,4 +112,29 @@ interface IAppManager {
 	 * @since 9.0.0
 	 */
 	public function getAlwaysEnabledApps();
+
+	/**
+	 * @param string $package
+	 * @return mixed
+	 * @since 9.2.0
+	 */
+	public function installApp($package);
+
+	/**
+	 * @param string $package
+	 * @return mixed
+	 * @since 9.2.0
+	 */
+	public function updateApp($package);
+
+	/**
+	 * Returns the app information from "appinfo/info.xml".
+	 *
+	 * @param string $appId app id
+	 * @return array app info
+	 * @since 9.2.0
+	 */
+	public function getAppInfo($appId);
+
+
 }

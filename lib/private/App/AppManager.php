@@ -30,6 +30,7 @@
 
 namespace OC\App;
 
+use OC\Installer;
 use OCP\App\IAppManager;
 use OCP\App\ManagerEvent;
 use OCP\IAppConfig;
@@ -107,9 +108,10 @@ class AppManager implements IAppManager {
 				$values[$appId] = 'yes';
 			}
 
-			$this->installedAppsCache = array_filter($values, function ($value) {
-				return $value !== 'no';
-			});
+			$this->installedAppsCache = $values;
+//			$this->installedAppsCache = array_filter($values, function ($value) {
+//				return $value !== 'no';
+//			});
 			ksort($this->installedAppsCache);
 		}
 		return $this->installedAppsCache;
@@ -368,5 +370,29 @@ class AppManager implements IAppManager {
 	public function getAlwaysEnabledApps() {
 		$this->loadShippedJson();
 		return $this->alwaysEnabled;
+	}
+
+	/**
+	 * @param string $package
+	 * @return mixed
+	 * @since 9.2.0
+	 */
+	public function installApp($package) {
+		return Installer::installApp([
+			'source' => 'local',
+			'path' => $package
+		]);
+	}
+
+	/**
+	 * @param string $package
+	 * @return mixed
+	 * @since 9.2.0
+	 */
+	public function updateApp($package) {
+		return Installer::updateApp([
+			'source' => 'local',
+			'path' => $package
+		]);
 	}
 }

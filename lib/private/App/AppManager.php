@@ -79,10 +79,11 @@ class AppManager implements IAppManager {
 	private $dispatcher;
 
 	/**
-	 * @param \OCP\IUserSession $userSession
-	 * @param \OCP\IAppConfig $appConfig
-	 * @param \OCP\IGroupManager $groupManager
-	 * @param \OCP\ICacheFactory $memCacheFactory
+	 * @param IUserSession $userSession
+	 * @param IAppConfig $appConfig
+	 * @param IGroupManager $groupManager
+	 * @param ICacheFactory $memCacheFactory
+	 * @param EventDispatcherInterface $dispatcher
 	 */
 	public function __construct(IUserSession $userSession,
 								IAppConfig $appConfig,
@@ -108,10 +109,9 @@ class AppManager implements IAppManager {
 				$values[$appId] = 'yes';
 			}
 
-			$this->installedAppsCache = $values;
-//			$this->installedAppsCache = array_filter($values, function ($value) {
-//				return $value !== 'no';
-//			});
+			$this->installedAppsCache = array_filter($values, function ($value) {
+				return $value !== 'no';
+			});
 			ksort($this->installedAppsCache);
 		}
 		return $this->installedAppsCache;
@@ -277,7 +277,7 @@ class AppManager implements IAppManager {
 	/**
 	 * Returns a list of apps that need upgrade
 	 *
-	 * @param array $version ownCloud version as array of version components
+	 * @param array $ocVersion ownCloud version as array of version components
 	 * @return array list of app info from apps that need an upgrade
 	 *
 	 * @internal
@@ -394,5 +394,15 @@ class AppManager implements IAppManager {
 			'source' => 'local',
 			'path' => $package
 		]);
+	}
+
+	/**
+	 * Returns the list of all apps, enabled and disabled
+	 *
+	 * @return string[]
+	 * @since 9.2.0
+	 */
+	public function getAllApps() {
+		return $this->appConfig->getApps();
 	}
 }

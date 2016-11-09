@@ -136,5 +136,13 @@ interface IAppManager {
 	 */
 	public function getAppInfo($appId);
 
+	/**
+	 * Returns the list of all apps, enabled and disabled
+	 *
+	 * @return string[]
+	 * @since 9.2.0
+	 */
+	public function getAllApps();
+
 
 }

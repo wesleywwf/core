@@ -119,32 +119,6 @@ class AppSettingsController extends Controller {
 	}
 
 	/**
-	 * @NoCSRFRequired
-	 * @param string $category
-	 * @return TemplateResponse
-	 */
-	public function viewApps($category = '') {
-		$categoryId = $this->getCategory($category);
-		if ($categoryId === self::CAT_ENABLED) {
-			// Do not use an arbitrary input string, because we put the category in html
-			$category = 'enabled';
-		}
-
-		$params = [];
-		$params['experimentalEnabled'] = $this->config->getSystemValue('appstore.experimental.enabled', false);
-		$params['category'] = $category;
-		$params['appstoreEnabled'] = $this->config->getSystemValue('appstoreenabled', true) === true;
-		$this->navigationManager->setActiveEntry('core_apps');
-
-		$templateResponse = new TemplateResponse($this->appName, 'apps', $params, 'user');
-		$policy = new ContentSecurityPolicy();
-		$policy->addAllowedImageDomain('https://apps.owncloud.com');
-		$templateResponse->setContentSecurityPolicy($policy);
-
-		return $templateResponse;
-	}
-
-	/**
 	 * Get all available categories
 	 * @return array
 	 */

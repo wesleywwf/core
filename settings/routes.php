@@ -46,7 +46,6 @@ $application->registerRoutes($this, [
 		['name' => 'MailSettings#sendTestMail', 'url' => '/settings/admin/mailtest', 'verb' => 'POST'],
 		['name' => 'Encryption#startMigration', 'url' => '/settings/admin/startmigration', 'verb' => 'POST'],
 		['name' => 'AppSettings#listCategories', 'url' => '/settings/apps/categories', 'verb' => 'GET'],
-		['name' => 'AppSettings#viewApps', 'url' => '/settings/apps', 'verb' => 'GET'],
 		['name' => 'AppSettings#listApps', 'url' => '/settings/apps/list', 'verb' => 'GET'],
 		['name' => 'AppSettings#changeExperimentalConfigState', 'url' => '/settings/apps/experimental', 'verb' => 'POST'],
 		['name' => 'SecuritySettings#trustedDomains', 'url' => '/settings/admin/security/trustedDomains', 'verb' => 'POST'],

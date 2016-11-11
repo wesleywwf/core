@@ -388,6 +388,46 @@ class SharedMountTest extends TestCase {
 		\OC_Group::removeFromGroup(self::TEST_FILES_SHARING_API_USER3, 'testGroup');
 	}
 
+	public function testIsTargetAllowed() {
+		$user1 = self::TEST_FILES_SHARING_API_USER1;
+		$user2 = self::TEST_FILES_SHARING_API_USER2;
+		$user3 = self::TEST_FILES_SHARING_API_USER3;
+
+		// user1 shares with user2
+		$userFolder = \OC::$server->getUserFolder($user1);
+		$sharedFolder = $userFolder->newFolder('user1-share');
+
+		$share = $this->share(
+			\OCP\Share::SHARE_TYPE_USER,
+			$sharedFolder,
+			$user1,
+			$user2,
+			\OCP\Constants::PERMISSION_ALL);
+
+		$this->loginAsUser($user2);
+
+		// user2 shares with user3
+		$userFolder2 = \OC::$server->getUserFolder($user2);
+
+		$sharedFolder2 = $userFolder2->newFolder('shareddir');
+		$userFolder2->newFolder('shareddir/sub');
+		$userFolder2->newFolder('shareddir/sub2');
+
+		$share2 = $this->share(
+			\OCP\Share::SHARE_TYPE_USER,
+			$sharedFolder2,
+			$user2,
+			$user3,
+			\OCP\Constants::PERMISSION_ALL);
+
+		$receivedFolder = $userFolder2->get('user1-share');
+		$this->assertFalse($receivedFolder->move('/' . $user2 . '/files/shareddir'), 'Cannot overwrite shared folder with received mount');
+		$this->assertFalse($receivedFolder->move('/' . $user2 . '/files/shareddir/sub'), 'Cannot move received mount point into shared folder');
+		$this->assertFalse($receivedFolder->move('/' . $user2 . '/files/shareddir/sub/sub2'), 'Cannot move received mount point into shared subfolder');
+
+		$shareManager->deleteShare($share);
+		$shareManager->deleteShare($share2);
+	}
 }
 
 class DummyTestClassSharedMount extends \OCA\Files_Sharing\SharedMount {

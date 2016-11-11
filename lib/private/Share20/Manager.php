@@ -983,6 +983,24 @@ class Manager implements IManager {
 	 * @return Share[]
 	 */
 	public function getSharesByPath(\OCP\Files\Node $path, $page=0, $perPage=50) {
+		$types = [\OCP\Share::SHARE_TYPE_USER, \OCP\Share::SHARE_TYPE_GROUP];
+		$providers = [];
+		$results = [];
+
+		foreach ($types as $type) {
+			$providers[] = $this->factory->getProviderForType($type);
+		}
+
+		// in most cases it's the same provider
+		if ($providers[0] === $providers[1]) {
+			$providers = [$providers[0]];
+		}
+
+		foreach ($providers as $provider) {
+			$results = array_merge($results, $provider->getSharesByPath($path));
+		}
+
+		return $results;
 	}
 
 	/**

@@ -113,6 +113,7 @@ class MultipartContentsParser {
      */
     public function getContent() {
         if ($this->content === null) {
+            // pass body by reference, so other objects can have global access
             $this->content = $this->request->getBody();
 
             if (!$this->content) {
@@ -122,7 +123,7 @@ class MultipartContentsParser {
 
         return $this->content;
     }
-
+    
     /**
      * Get a part of request separated by boundrary $boundary.
      *
@@ -132,7 +133,7 @@ class MultipartContentsParser {
      * @param  String $boundary
      *
      * @throws \Exception
-     * @return array (array $headers, resource $bodyStream)
+     * @return array $headers
      */
     public function getPartHeaders($boundary) {
         $delimiter = '--'.$boundary."\r\n";
@@ -216,6 +217,10 @@ class MultipartContentsParser {
             $count -= $bufSize;
         }
 
+        $bytesWritten = strlen($buf);
+        if ($length != $bytesWritten){
+            throw new BadRequest('Method streamRead read '.$bytesWritten.' expeceted '.$length);
+        }
         return $buf;
     }
 

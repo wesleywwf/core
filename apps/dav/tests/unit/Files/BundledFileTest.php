@@ -143,7 +143,7 @@ class BundledFileTest extends \Test\TestCase {
 			null
 		);
 
-		$file = new BundledFile($view, $info);
+		$file = new BundledFile($view, $info, null);
 
 		// beforeMethod locks
 		$view->lockFile($path, ILockingProvider::LOCK_SHARED);

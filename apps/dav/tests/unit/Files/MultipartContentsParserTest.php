@@ -53,8 +53,6 @@ class MultipartContentsParserTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\BadRequest
-	 * @expectedExceptionMessage Unable to determine headers limit for content part
 	 */
 	public function testReadHeadersThrowEmptyHeader() {
 		$request = $this->getMockBuilder('Sabre\HTTP\RequestInterface')
@@ -63,19 +61,7 @@ class MultipartContentsParserTest extends TestCase {
 
 		$mcp = new \OCA\DAV\Files\MultipartContentsParser($request);
 		$mcp->readHeaders('');
-	}
-
-	/**
-	 * @expectedException \Sabre\DAV\Exception\BadRequest
-	 * @expectedExceptionMessage Header of content part contains incorrect headers
-	 */
-	public function testReadHeadersThrowIncorrectHeader() {
-		$request = $this->getMockBuilder('Sabre\HTTP\RequestInterface')
-			->disableOriginalConstructor()
-			->getMock();
-
-		$mcp = new \OCA\DAV\Files\MultipartContentsParser($request);
-		$mcp->readHeaders("Content-ID: 1\r\nContent-MD5\r\n\r\n");
+		$this->assertEquals(null, $mcp->readHeaders(''));
 	}
 
 	/**
@@ -146,7 +132,7 @@ class MultipartContentsParserTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \Sabre\DAV\Exception\BadRequest
+	 * @expectedException \Exception
 	 * @expectedExceptionMessage An error appears while reading and parsing header of content part using fgets
 	 */
 	public function testGetPartThrowFailfgets() {
@@ -173,7 +159,7 @@ class MultipartContentsParserTest extends TestCase {
 	/**
 	 * If one one the content parts does not contain boundrary, means that received wrong request
 	 *
-	 * @expectedException \Sabre\DAV\Exception\BadRequest
+	 * @expectedException \Exception
 	 * @expectedExceptionMessage Expected boundary delimiter in content part
 	 */
 	public function testGetPartThrowNoBoundraryFound() {
